@@ -103,7 +103,8 @@ export function WorkoutReviewForm({ workout, onSuccess }: WorkoutReviewFormProps
           <span>Review Your Workout</span>
         </CardTitle>
         <CardDescription>
-          {format(new Date(workout.workout_date), "EEEE, MMMM d, yyyy")} • {workout.duration} minutes
+          {(workout.workout_date ? format(new Date(workout.workout_date), "EEEE, MMMM d, yyyy") : "Date unknown")}
+          {typeof workout.duration === "number" ? ` • ${workout.duration} minutes` : ""}
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -86,7 +86,8 @@ export function WorkoutForm() {
                 min="1"
                 max="480"
                 placeholder="30"
-                required
+                step="1"
+                
                 className="w-full"
               />
             </div>
@@ -99,9 +100,8 @@ export function WorkoutForm() {
                 id="workout_date"
                 name="workout_date"
                 type="date"
-                defaultValue={today}
                 max={today}
-                required
+                
                 className="w-full"
               />
             </div>

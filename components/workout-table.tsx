@@ -31,7 +31,7 @@ export function WorkoutTable({ workouts }: WorkoutTableProps) {
     (workout) =>
       workout.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       workout.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      format(new Date(workout.workout_date), "PPP").toLowerCase().includes(searchTerm.toLowerCase()),
+      (workout.workout_date ? format(new Date(workout.workout_date), "PPP").toLowerCase().includes(searchTerm.toLowerCase()) : false),
   )
 
   const handleDelete = async (workoutId: string) => {
@@ -46,7 +46,7 @@ export function WorkoutTable({ workouts }: WorkoutTableProps) {
   }
 
   const getTotalDuration = () => {
-    return filteredWorkouts.reduce((total, workout) => total + workout.duration, 0)
+    return filteredWorkouts.reduce((total, workout) => total + (typeof workout.duration === "number" ? workout.duration : 0), 0)
   }
 
   const getWorkoutTypeStats = () => {
@@ -183,8 +183,14 @@ export function WorkoutTable({ workouts }: WorkoutTableProps) {
                             {config.label}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-medium">{workout.duration} min</TableCell>
-                        <TableCell>{format(new Date(workout.workout_date), "MMM d, yyyy")}</TableCell>
+                        <TableCell className="font-medium">
+                          {typeof workout.duration === "number" ? `${workout.duration} min` : <span className="text-muted-foreground italic">-</span>}
+                        </TableCell>
+                        <TableCell>
+                          {workout.workout_date ? format(new Date(workout.workout_date), "MMM d, yyyy") : (
+                            <span className="text-muted-foreground italic">-</span>
+                          )}
+                        </TableCell>
                         <TableCell className="max-w-[200px]">
                           {workout.notes ? (
                             <span className="text-sm text-muted-foreground truncate block">{workout.notes}</span>

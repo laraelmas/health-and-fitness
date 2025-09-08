@@ -2,9 +2,9 @@ export interface Workout {
   id: string
   user_id: string
   type: "cardio" | "strength" | "pilates" | "custom"
-  duration: number // in minutes
+  duration?: number | null // in minutes
   notes?: string
-  workout_date: string // ISO date string
+  workout_date?: string | null // ISO date string
   created_at: string
   updated_at: string
 }

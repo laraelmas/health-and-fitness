@@ -30,7 +30,7 @@ export default async function ReviewPage() {
 
   // Get workouts that can be reviewed (completed in the last 7 days and don't have reviews yet)
   const reviewableWorkouts = workouts.filter((workout) => {
-    const workoutDate = new Date(workout.workout_date)
+    const workoutDate = new Date(workout.workout_date || "")
     const sevenDaysAgo = subDays(new Date(), 7)
     return isAfter(workoutDate, sevenDaysAgo) || workout.workout_date === new Date().toISOString().split("T")[0]
   })
@@ -117,10 +117,12 @@ export default async function ReviewPage() {
                             <Icon className="h-4 w-4 mr-1" />
                             {workout.type}
                           </Badge>
-                          <div>
+                          {workout.workout_date && <div>
                             <p className="font-medium">{format(new Date(workout.workout_date), "EEEE, MMMM d")}</p>
                             <p className="text-sm text-muted-foreground">{workout.duration} minutes</p>
-                          </div>
+                        
+                          </div>}
+
                           {workout.notes && (
                             <div className="max-w-md">
                               <p className="text-sm text-muted-foreground truncate">{workout.notes}</p>
@@ -177,10 +179,10 @@ export default async function ReviewPage() {
                               <Icon className="h-4 w-4 mr-1" />
                               {workout.type}
                             </Badge>
-                            <div>
-                              <p className="font-medium">{format(new Date(workout.workout_date), "EEEE, MMMM d")}</p>
-                              <p className="text-sm text-muted-foreground">{workout.duration} minutes</p>
-                            </div>
+                      {workout.workout_date && <div>
+                                <p className="font-medium">{format(new Date(workout.workout_date), "EEEE, MMMM d")}</p>
+                                <p className="text-sm text-muted-foreground">{workout.duration} minutes</p>
+                              </div>}
                           </div>
                           <div className="flex items-center gap-2 text-green-600">
                             <Star className="h-4 w-4 fill-current" />

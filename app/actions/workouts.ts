@@ -18,18 +18,19 @@ export async function createWorkout(formData: FormData) {
   }
 
   const type = formData.get("type") as string
-  const duration = Number.parseInt(formData.get("duration") as string)
+  const durationValue = formData.get("duration") as string | null
+  const duration = durationValue ? Number.parseInt(durationValue) : null
   const notes = formData.get("notes") as string
-  const workoutDate = formData.get("workout_date") as string
+  const workoutDate = (formData.get("workout_date") as string) || null
 
   const { data, error } = await supabase
     .from("workouts")
     .insert({
       user_id: user.id,
       type,
-      duration,
+      duration: duration || null,
       notes: notes || null,
-      workout_date: workoutDate,
+      workout_date: workoutDate || null,
     })
     .select()
     .single()
