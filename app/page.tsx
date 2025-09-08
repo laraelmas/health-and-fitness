@@ -1,103 +1,192 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/server"
+import { Dumbbell, Calendar, Plus, BarChart3, Target, Zap } from "lucide-react"
 
-export default function Home() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
+              <Dumbbell className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              FitTracker
+            </h1>
+          </div>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Your personal fitness companion. Track workouts, monitor progress, and achieve your fitness goals.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Auth Section */}
+        {!user ? (
+          <div className="max-w-md mx-auto mb-12">
+            <Card>
+              <CardHeader className="text-center">
+                <CardTitle>Get Started</CardTitle>
+                <CardDescription>Sign up or log in to start tracking your workouts</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button asChild className="w-full">
+                  <Link href="/auth/sign-up">Sign Up</Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full bg-transparent">
+                  <Link href="/auth/login">Log In</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <div className="max-w-md mx-auto mb-12">
+            <Card className="border-green-200 bg-green-50">
+              <CardContent className="pt-6 text-center">
+                <p className="text-green-800 mb-4">Welcome back! Ready for your next workout?</p>
+                <Button
+                  asChild
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                >
+                  <Link href="/add">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Log New Workout
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <Plus className="h-5 w-5 text-red-600" />
+                </div>
+                <CardTitle className="text-lg">Quick Logging</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Easily log cardio, strength, pilates, or custom workouts with duration and notes.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <BarChart3 className="h-5 w-5 text-blue-600" />
+                </div>
+                <CardTitle className="text-lg">Progress Tracking</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                View your workouts in table format and track your fitness journey over time.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Calendar className="h-5 w-5 text-purple-600" />
+                </div>
+                <CardTitle className="text-lg">Calendar View</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Visualize your workout schedule and consistency with an intuitive calendar interface.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Target className="h-5 w-5 text-green-600" />
+                </div>
+                <CardTitle className="text-lg">Workout Reviews</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Rate your workouts and add feedback to understand what works best for you.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <Zap className="h-5 w-5 text-yellow-600" />
+                </div>
+                <CardTitle className="text-lg">Multiple Types</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Support for cardio, strength training, pilates, and custom workout types.</p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-indigo-100 rounded-lg">
+                  <Dumbbell className="h-5 w-5 text-indigo-600" />
+                </div>
+                <CardTitle className="text-lg">Personal Data</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Your workout data is private and secure, accessible only by you.</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions for Logged In Users */}
+        {user && (
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-6">Quick Actions</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Button asChild variant="outline" className="h-16 bg-transparent">
+                <Link href="/add" className="flex flex-col items-center gap-2">
+                  <Plus className="h-5 w-5" />
+                  <span>Add Workout</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-16 bg-transparent">
+                <Link href="/workouts" className="flex flex-col items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  <span>View Workouts</span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="h-16 bg-transparent">
+                <Link href="/calendar" className="flex flex-col items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  <span>Calendar</span>
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  );
+  )
 }
