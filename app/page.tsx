@@ -14,20 +14,6 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
-              <Dumbbell className="h-8 w-8 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              FitTracker
-            </h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Your personal fitness companion. Track workouts, monitor progress, and achieve your fitness goals.
-          </p>
-        </div>
 
         {/* Auth Section */}
         {!user ? (
@@ -138,100 +124,7 @@ export default async function HomePage() {
         {/* Tabs Selector below stats */}
         <DashboardTabs />
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <Card className="hover:shadow-lg transition-shadow border-red-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <Plus className="h-5 w-5 text-red-600" />
-                </div>
-                <CardTitle className="text-lg">Quick Logging</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Easily log cardio, strength, pilates, or custom workouts with duration and notes.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow border-blue-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <BarChart3 className="h-5 w-5 text-blue-600" />
-                </div>
-                <CardTitle className="text-lg">Progress Tracking</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                View your workouts in table format and track your fitness journey over time.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow border-purple-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Calendar className="h-5 w-5 text-purple-600" />
-                </div>
-                <CardTitle className="text-lg">Calendar View</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Visualize your workout schedule and consistency with an intuitive calendar interface.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow border-green-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Target className="h-5 w-5 text-green-600" />
-                </div>
-                <CardTitle className="text-lg">Workout Reviews</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Rate your workouts and add feedback to understand what works best for you.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow border-yellow-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-yellow-100 rounded-lg">
-                  <Zap className="h-5 w-5 text-yellow-600" />
-                </div>
-                <CardTitle className="text-lg">Multiple Types</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Support for cardio, strength training, pilates, and custom workout types.</p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow border-indigo-200">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 rounded-lg">
-                  <Dumbbell className="h-5 w-5 text-indigo-600" />
-                </div>
-                <CardTitle className="text-lg">Personal Data</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Your workout data is private and secure, accessible only by you.</p>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Features Grid moved into Dashboard tab component */}
 
         {/* Quick Actions for Logged In Users */}
         {user && (
