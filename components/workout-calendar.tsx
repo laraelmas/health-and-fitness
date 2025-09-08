@@ -44,15 +44,25 @@ export function WorkoutCalendar({ workouts }: WorkoutCalendarProps) {
     return date
   })
 
+  // Safely parse workout date which may be nullable
+  const parseWorkoutDate = (workout: Workout): Date | null => {
+    if (!workout.workout_date) return null
+    const d = new Date(workout.workout_date)
+    return Number.isNaN(d.getTime()) ? null : d
+  }
+
   // Get workouts for a specific day
   const getWorkoutsForDay = (date: Date) => {
-    return workouts.filter((workout) => isSameDay(new Date(workout.workout_date), date))
+    return workouts.filter((workout) => {
+      const d = parseWorkoutDate(workout)
+      return d ? isSameDay(d, date) : false
+    })
   }
 
   // Get total duration for a day
   const getTotalDurationForDay = (date: Date) => {
     const dayWorkouts = getWorkoutsForDay(date)
-    return dayWorkouts.reduce((total, workout) => total + workout.duration, 0)
+    return dayWorkouts.reduce((total, workout) => total + (workout.duration ?? 0), 0)
   }
 
   // Navigate months
@@ -194,7 +204,10 @@ export function WorkoutCalendar({ workouts }: WorkoutCalendarProps) {
               <div>
                 <p className="text-sm text-muted-foreground">Workouts This Month</p>
                 <p className="text-2xl font-bold">
-                  {workouts.filter((w) => isSameMonth(new Date(w.workout_date), currentDate)).length}
+                  {workouts.filter((w) => {
+                    const d = parseWorkoutDate(w)
+                    return d ? isSameMonth(d, currentDate) : false
+                  }).length}
                 </p>
               </div>
             </div>
@@ -209,8 +222,11 @@ export function WorkoutCalendar({ workouts }: WorkoutCalendarProps) {
                 <p className="text-sm text-muted-foreground">Total Minutes</p>
                 <p className="text-2xl font-bold">
                   {workouts
-                    .filter((w) => isSameMonth(new Date(w.workout_date), currentDate))
-                    .reduce((total, w) => total + w.duration, 0)}
+                    .filter((w) => {
+                      const d = parseWorkoutDate(w)
+                      return d ? isSameMonth(d, currentDate) : false
+                    })
+                    .reduce((total, w) => total + (w.duration ?? 0), 0)}
                 </p>
               </div>
             </div>
@@ -227,8 +243,14 @@ export function WorkoutCalendar({ workouts }: WorkoutCalendarProps) {
                   {
                     new Set(
                       workouts
-                        .filter((w) => isSameMonth(new Date(w.workout_date), currentDate))
-                        .map((w) => format(new Date(w.workout_date), "yyyy-MM-dd")),
+                        .filter((w) => {
+                          const d = parseWorkoutDate(w)
+                          return d ? isSameMonth(d, currentDate) : false
+                        })
+                        .map((w) => {
+                          const d = parseWorkoutDate(w)
+                          return d ? format(d, "yyyy-MM-dd") : ""
+                        }),
                     ).size
                   }
                 </p>
@@ -245,10 +267,17 @@ export function WorkoutCalendar({ workouts }: WorkoutCalendarProps) {
                 <p className="text-sm text-muted-foreground">Avg Per Day</p>
                 <p className="text-2xl font-bold">
                   {(() => {
-                    const monthWorkouts = workouts.filter((w) => isSameMonth(new Date(w.workout_date), currentDate))
-                    const activeDays = new Set(monthWorkouts.map((w) => format(new Date(w.workout_date), "yyyy-MM-dd")))
-                      .size
-                    const totalMinutes = monthWorkouts.reduce((total, w) => total + w.duration, 0)
+                    const monthWorkouts = workouts.filter((w) => {
+                      const d = parseWorkoutDate(w)
+                      return d ? isSameMonth(d, currentDate) : false
+                    })
+                    const activeDays = new Set(
+                      monthWorkouts.map((w) => {
+                        const d = parseWorkoutDate(w)
+                        return d ? format(d, "yyyy-MM-dd") : ""
+                      }),
+                    ).size
+                    const totalMinutes = monthWorkouts.reduce((total, w) => total + (w.duration ?? 0), 0)
                     return activeDays > 0 ? Math.round(totalMinutes / activeDays) : 0
                   })()}
                 </p>

@@ -111,7 +111,7 @@ export function WorkoutTable({ workouts }: WorkoutTableProps) {
                 <p className="text-2xl font-bold">
                   {
                     workouts.filter((w) => {
-                      const workoutDate = new Date(w.workout_date)
+                      const workoutDate = new Date(w.workout_date || "")
                       const weekAgo = new Date()
                       weekAgo.setDate(weekAgo.getDate() - 7)
                       return workoutDate >= weekAgo
@@ -184,7 +184,7 @@ export function WorkoutTable({ workouts }: WorkoutTableProps) {
                           </Badge>
                         </TableCell>
                         <TableCell className="font-medium">
-                          {typeof workout.duration === "number" ? `${workout.duration} min` : <span className="text-muted-foreground italic">-</span>}
+                          {workout.duration && typeof workout.duration === "number" ? `${workout.duration} min` : <span className="text-muted-foreground italic">-</span>}
                         </TableCell>
                         <TableCell>
                           {workout.workout_date ? format(new Date(workout.workout_date), "MMM d, yyyy") : (
